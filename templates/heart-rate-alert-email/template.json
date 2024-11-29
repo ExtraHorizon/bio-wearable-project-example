@@ -1,0 +1,17 @@
+{
+  "description": "Email send to alert patient of their high heart rate",
+  "schema": {
+    "type": "object",
+    "fields": {
+      "patientFirstName": {
+        "type": "string"
+      },
+      "heartRate": {
+        "type": "number"
+      }
+    }
+  },
+  "fields": {
+    "subject": "Heart Rate Alert"
+  }
+}

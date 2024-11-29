@@ -1,0 +1,42 @@
+{
+  "$schema": "https://swagger.extrahorizon.com/cli/1.7.0/config-json-schemas/Schema.json",
+
+  "name": "bio-measurement",
+  "description": "Measurement from a bio wearable device",
+  
+  "createMode": "default",
+  "readMode": "default",
+  "updateMode": "default",
+  "deleteMode": "permissionRequired",
+  
+  "properties": {
+    "heartRate": {
+      "type": "number"
+    },
+    "temperature": {
+      "type": "number"
+    },
+    "ppgFileToken": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+
+  "statuses": {
+    "created": {}
+  },
+  
+  "creationTransition": {
+    "type": "manual",
+    "toStatus": "created",
+    "actions": [
+      {
+        "type": "task",
+        "functionName": "process-bio-measurement"
+      }
+    ]
+  }
+}

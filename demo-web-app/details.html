@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Bio Wearable Demo</title>
+  </head>
+  <body>
+    <h1>Bio Wearable Demo</h1>
+    <p><a href="index.html">Back to overview</a></p>
+    <canvas id="myChart"></canvas>
+    <script type="module">
+      import { createClient } from '@extrahorizon/javascript-sdk';
+      import { Chart } from 'chart.js/auto';
+
+      const exh = createClient({
+        host: import.meta.env.VITE_API_HOST,
+        consumerKey: import.meta.env.VITE_API_OAUTH_CONSUMER_KEY,
+        consumerSecret: import.meta.env.VITE_API_OAUTH_CONSUMER_SECRET,
+        token: import.meta.env.VITE_API_OAUTH_TOKEN,
+        tokenSecret: import.meta.env.VITE_API_OAUTH_TOKEN_SECRET,
+      });
+
+      const measurementId = new URLSearchParams(window.location.search).get('id');
+      const measurement = await exh.data.documents.findById('bio-measurement', measurementId);
+
+      const fileBuffer = await exh.files.retrieve(measurement.data.ppgFileToken);
+      const fileContent = new TextDecoder().decode(fileBuffer);
+      const signal = JSON.parse(fileContent);
+
+      new Chart(document.getElementById('myChart'), {
+        type: 'line',
+        data: {
+          labels: signal.map((_, index) => index),
+          datasets: [{
+            data: signal,
+            label: 'PPG Signal',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          aspectRatio: 5,
+          elements: {
+            point: { radius: 0 }
+          },
+          // Limit the x-axis to 500 data points
+          scales: {
+            x: { max: 500 }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

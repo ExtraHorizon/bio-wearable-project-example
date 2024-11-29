@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Bio Wearable Demo</title>
+  </head>
+  <body>
+    <h1>Bio Wearable Demo</h1>
+    <table id="overview">
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>Heart Rate</th>
+          <th>Temperature</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <script type="module">
+      import { createClient, rqlBuilder } from '@extrahorizon/javascript-sdk';
+
+      const exh = createClient({
+        host: import.meta.env.VITE_API_HOST,
+        consumerKey: import.meta.env.VITE_API_OAUTH_CONSUMER_KEY,
+        consumerSecret: import.meta.env.VITE_API_OAUTH_CONSUMER_SECRET,
+        token: import.meta.env.VITE_API_OAUTH_TOKEN,
+        tokenSecret: import.meta.env.VITE_API_OAUTH_TOKEN_SECRET,
+      });
+
+      const measurementResponse = await exh.data.documents.find('bio-measurement', {
+        rql: rqlBuilder()
+          .sort('-creationTimestamp')
+          .limit(10)
+          .build() 
+      });
+
+      const measurements = measurementResponse.data;
+
+      const tbody = document.querySelector('#overview tbody');
+      measurements.forEach(measurement => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${measurement.creationTimestamp.toISOString()}</td>
+          <td>${measurement.data.heartRate}</td>
+          <td>${measurement.data.temperature}</td>
+          <td><a href="details.html?id=${measurement.id}">Go to details</a></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    </script>
+  </body>
+</html>

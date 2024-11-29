@@ -1,0 +1,14 @@
+{
+    "name": "process-bio-measurement",
+    "description": "process-bio-measurement",
+    "path": "./",
+    "entryPoint": "index.handler",
+    "runtime": "nodejs20.x",
+    "environment": {
+        "API_HOST": "$API_HOST",
+        "API_OAUTH_CONSUMER_KEY": "$API_OAUTH_CONSUMER_KEY",
+        "API_OAUTH_CONSUMER_SECRET": "$API_OAUTH_CONSUMER_SECRET",
+        "API_OAUTH_TOKEN": "$API_OAUTH_TOKEN",
+        "API_OAUTH_TOKEN_SECRET": "$API_OAUTH_TOKEN_SECRET"
+    }
+}
